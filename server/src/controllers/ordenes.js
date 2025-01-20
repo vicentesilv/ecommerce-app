@@ -1,77 +1,74 @@
-const db = require("../config/db");
+const db = require('../config/db');
 
 const crearOrden = async (req, res) => {
-  const { userId, items } = req.body; // items será un array de { productId, quantity }
-    if (!items || items.length === 0) {
-        return res.status(400).json({ error: 'LOS PRODUCTOS SON REQUERIDOS PARA CREAR UNA ORDEN.' });
-    }
+    const { idUsuario, idMetodoPago } = req.body;
 
     try {
-        // Calcular el total de la orden
-        let total = 0;
-        for (const item of items) {
-            const [product] = await db.query('SELECT price FROM productos WHERE id = ?', [item.productId]);
-            if (!product.length) {
-                return res.status(404).json({ error: `PRODUCTO CON ID${item.productId} no ENCONTRADO.` });
-            }
-            total += product[0].price * item.quantity;
+        const [carrito] = await db.query(
+            'SELECT c.id_producto, c.cantidad, p.precio FROM carrito c JOIN productos p ON c.id_producto = p.id WHERE c.id_usuario = ?',
+            [idUsuario]
+        );
+
+        if (carrito.length === 0) {
+            return res.status(400).json({ error: 'El carrito está vacío' });
         }
 
-        // Crear la orden
-        const [orderResult] = await db.query('INSERT INTO ordenes (user_id, total) VALUES (?, ?)', [userId, total]);
+        const total = carrito.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
 
-        // Insertar los detalles de la orden
-        const orderId = orderResult.insertId;
-        for (const item of items) {
-            const [product] = await db.query('SELECT price FROM productos WHERE id = ?', [item.productId]);
+        const [resultadoOrden] = await db.query(
+            'INSERT INTO ordenes (id_usuario, total, id_metodo_pago) VALUES (?, ?, ?)',
+            [idUsuario, total, idMetodoPago]
+        );
+        const idOrden = resultadoOrden.insertId;
+
+        for (const item of carrito) {
             await db.query(
-                'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)',
-                [orderId, item.productId, item.quantity, product[0].price]
+                'INSERT INTO detalles_orden (id_orden, id_producto, cantidad, precio) VALUES (?, ?, ?, ?)',
+                [idOrden, item.id_producto, item.cantidad, item.precio]
             );
-
-            // Actualizar el stock del producto
-            await db.query('UPDATE productos SET stock = stock - ? WHERE id = ?', [item.quantity, item.productId]);
+            await db.query('UPDATE productos SET stock = stock - ? WHERE id = ?', [item.cantidad, item.id_producto]);
         }
 
-        res.status(201).json({ message: 'ORDEN CREADA CORRECTAMENTE', orderId });
+        await db.query('DELETE FROM carrito WHERE id_usuario = ?', [idUsuario]);
+        res.status(201).json({ mensaje: 'Orden creada con éxito', idOrden });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-const mostrarOrdenes = async (req, res) => {
-  try {
-    const [rows] = await db.query(
-        "SELECT o.id, o.total, u.name as user_name FROM ordenes o JOIN usuarios u ON o.user_id = u.id"
-    );
-    res.status(200).json(rows);
-} catch (error) {
-    res.status(500).json({ error: error.message });
-}
-};
-
-const mostrarOrden = async (req, res) => {
-    const { id } = req.params;
+const obtenerOrdenes = async (req, res) => {
     try {
-        const [rows] = await db.query(
-            "SELECT o.id, o.total, u.name as user_name FROM ordenes o JOIN usuarios u ON o.user_id = u.id WHERE o.id = ?",
-            [id]
+        const [ordenes] = await db.query(
+            'SELECT o.id, o.total, o.creado_en, u.nombre AS usuario, m.nombre AS metodo_pago FROM ordenes o JOIN usuarios u ON o.id_usuario = u.id JOIN metodos_pago m ON o.id_metodo_pago = m.id'
         );
-        if (!rows.length) {
-            return res.status(404).json({ error: `ORDEN CON ID ${id} NO ENCONTRADA.` });
-        }
-        const [orderItems] = await db.query(
-            "SELECT p.name as product_name, oi.quantity, oi.price FROM order_items oi JOIN productos p ON oi.product_id = p.id WHERE oi.order_id = ?",
-            [id]
-        );
-        res.status(200).json(rows[0]);
+        res.json(ordenes);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
 
-module.exports = {
-    crearOrden,
-    mostrarOrdenes,
-    mostrarOrden
-}
+const obtenerDetallesOrden = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [orden] = await db.query(
+            'SELECT o.id, o.total, o.creado_en, u.nombre AS usuario, m.nombre AS metodo_pago FROM ordenes o JOIN usuarios u ON o.id_usuario = u.id JOIN metodos_pago m ON o.id_metodo_pago = m.id WHERE o.id = ?',
+            [id]
+        );
+
+        if (orden.length === 0) {
+            return res.status(404).json({ error: 'Orden no encontrada' });
+        }
+
+        const [detalles] = await db.query(
+            'SELECT d.id_producto, p.nombre AS producto, d.cantidad, d.precio FROM detalles_orden d JOIN productos p ON d.id_producto = p.id WHERE d.id_orden = ?',
+            [id]
+        );
+
+        res.json({ orden: orden[0], detalles });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = { crearOrden, obtenerOrdenes, obtenerDetallesOrden };

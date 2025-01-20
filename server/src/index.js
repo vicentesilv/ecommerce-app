@@ -1,6 +1,5 @@
-const {app, puerto} = require('./app');
-const cors = require('cors');
 
-app.use(cors());
+const app = require('./app');
+const PORT =  3000;
 
-app.listen(puerto, () => console.log(`servidor corriendo en el puerto ${puerto}...\n http://localhost:${puerto}`));
+app.listen(PORT, () => console.log(`Servidor corriendo en http://localhost:${PORT}`));
