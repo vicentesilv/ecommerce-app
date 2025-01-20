@@ -3,8 +3,8 @@ const { crearOrden, obtenerOrdenes, obtenerDetallesOrden } = require('../control
 
 const router = express.Router();
 
-router.post('/', crearOrden);
-router.get('/', obtenerOrdenes);
-router.get('/:id', obtenerDetallesOrden);
+router.post('/crearOrden', crearOrden);
+router.get('/listarOrdenes', obtenerOrdenes);
+router.get('/orden/:id', obtenerDetallesOrden);
 
 module.exports = router;

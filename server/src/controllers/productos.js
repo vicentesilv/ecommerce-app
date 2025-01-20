@@ -23,4 +23,17 @@ const crearProducto = async (req, res) => {
     }
 };
 
-module.exports = { obtenerProductos, crearProducto };
+const editarProducto = async (req, res) => {
+    const { id } = req.params;
+    const { nombre, descripcion, precio, stock } = req.body;
+
+    try {
+        await db.query('UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ? WHERE id = ?', [nombre, descripcion, precio, stock, id]);
+        res.status(200).json({ mensaje: 'Producto editado conxito' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+module.exports = { obtenerProductos, crearProducto, editarProducto };
