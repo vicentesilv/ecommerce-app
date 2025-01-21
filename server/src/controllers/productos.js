@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const path = require('path');
+const fs = require('fs');
 
 const obtenerProductos = async (req, res) => {
     try {
@@ -12,15 +14,41 @@ const obtenerProductos = async (req, res) => {
 const crearProducto = async (req, res) => {
     const { nombre, descripcion, precio, stock } = req.body;
 
+    // Verificar si se subió un archivo
+    if (!req.files || !req.files.imagen) {
+        return res.status(400).json({ error: 'La imagen es requerida.' });
+    }
+
+    const imagen = req.files.imagen;
+    const nombreArchivo = Date.now() + '-' + imagen.name;
+    const rutaImagen = path.join(__dirname, '../imagenes', nombreArchivo);
+
     try {
+        // Guardar la imagen en el servidor
+        await imagen.mv(rutaImagen);
+
+        // Insertar el producto en la base de datos
         const [resultado] = await db.query(
-            'INSERT INTO productos (nombre, descripcion, precio, stock) VALUES (?, ?, ?, ?)',
-            [nombre, descripcion, precio, stock]
+            'INSERT INTO productos (nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?)',
+            [nombre, descripcion, precio, stock, nombreArchivo]
         );
+
         res.status(201).json({ mensaje: 'Producto creado con éxito', id: resultado.insertId });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+};
+
+const mostrarImagen = (req, res) => {
+    const { nombreImagen } = req.params;
+    const ruta = path.join(__dirname, '../imagenes', nombreImagen);
+
+    fs.access(ruta, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).json({ error: 'Imagen no encontrada' });
+        }
+        res.sendFile(ruta);
+    });
 };
 
 const editarProducto = async (req, res) => {
@@ -28,12 +56,13 @@ const editarProducto = async (req, res) => {
     const { nombre, descripcion, precio, stock } = req.body;
 
     try {
-        await db.query('UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ? WHERE id = ?', [nombre, descripcion, precio, stock, id]);
-        res.status(200).json({ mensaje: 'Producto editado conxito' });
+        await db.query(
+            'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ? WHERE id = ?',
+            [nombre, descripcion, precio, stock, id]
+        );
+        res.json({ mensaje: 'Producto actualizado con éxito' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
-
-
-module.exports = { obtenerProductos, crearProducto, editarProducto };
+}
+module.exports = { obtenerProductos, crearProducto, mostrarImagen,editarProducto };

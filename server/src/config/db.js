@@ -4,7 +4,7 @@ const db = myql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'ecommerce'
+    database: 'ecommerce2'
 });
 
 module.exports = db.promise();

@@ -6,6 +6,7 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
+    rol ENUM('admin', 'cliente') DEFAULT 'cliente',
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -15,6 +16,7 @@ CREATE TABLE productos (
     descripcion TEXT,
     precio DECIMAL(10, 2) NOT NULL,
     stock INT DEFAULT 0,
+    imagen VARCHAR(255) DEFAULT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -23,11 +25,6 @@ CREATE TABLE metodos_pago (
     nombre VARCHAR(50) NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO metodos_pago (nombre) VALUES 
-('Tarjeta de Crédito'),
-('PayPal'),
-('Transferencia Bancaria');
 
 CREATE TABLE ordenes (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,3 +55,8 @@ CREATE TABLE carrito (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (id_producto) REFERENCES productos(id) ON DELETE CASCADE
 );
+
+INSERT INTO metodos_pago (nombre) VALUES 
+('Tarjeta de Crédito'),
+('PayPal'),
+('Transferencia Bancaria');

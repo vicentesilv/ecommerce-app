@@ -1,10 +1,14 @@
 const express = require('express');
+const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
+app.use(fileUpload({ createParentPath: true }));
+
 
 const rutasUsuarios = require('./routes/usuarios');
 const rutasProductos = require('./routes/productos');
