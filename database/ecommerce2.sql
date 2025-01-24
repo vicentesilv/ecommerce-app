@@ -1,3 +1,4 @@
+
 CREATE DATABASE ecommerce;
 USE ecommerce;
 
@@ -7,6 +8,7 @@ CREATE TABLE usuarios (
     correo VARCHAR(100) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
     rol ENUM('admin', 'cliente') DEFAULT 'cliente',
+    estatus ENUM('activo', 'inactivo') DEFAULT 'activo',
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

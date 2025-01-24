@@ -4,13 +4,13 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 const registrarUsuario = async (req, res) => {
-    const { nombre, correo, contrasena, rol } = req.body;
+    const { nombre, correo, contrasena, rol, estatus } = req.body;
     const contrasenaEncriptada = await bcrypt.hash(contrasena, 10);
 
     try {
         const [resultado] = await db.query(
-            'INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?)',
-            [nombre, correo, contrasenaEncriptada, rol]
+            'INSERT INTO usuarios (nombre, correo, contrasena, rol, estatus) VALUES (?, ?, ?, ?, ?)',
+            [nombre, correo, contrasenaEncriptada, rol || 'cliente', estatus || 'activo']
         );
         res.status(201).json({ mensaje: 'Usuario registrado con éxito', id: resultado.insertId });
     } catch (error) {
@@ -27,6 +27,10 @@ const iniciarSesion = async (req, res) => {
 
         if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
 
+        if (usuario.estatus === 'inactivo') {
+            return res.status(403).json({ error: 'Usuario deshabilitado' });
+        }
+
         const coincide = await bcrypt.compare(contrasena, usuario.contrasena);
         if (!coincide) return res.status(401).json({ error: 'Credenciales inválidas' });
 
@@ -36,5 +40,6 @@ const iniciarSesion = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 module.exports = { registrarUsuario, iniciarSesion };

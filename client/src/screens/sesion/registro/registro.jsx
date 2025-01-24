@@ -1,0 +1,88 @@
+import React, { useState } from "react";
+
+import { registrarUsuario } from "../../../api/axios";
+import "./registro.css"
+
+function Registro() {
+    const [nombre, setNombre] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [contrasena, setContrasena] = useState('');
+    const [constrasena2, setContrasena2] = useState('');
+    const [rol, setRol] = useState('');
+    const [mensajeError, setMensajeError] = useState('');
+    const [cargando, setCargando] = useState(false);
+
+    const manejarEnvio = async (e) => {
+        e.preventDefault();
+        setMensajeError('');
+        setCargando(true);
+
+        try {
+            if (contrasena !== constrasena2) {
+                throw new Error('Las contrasenas no coinciden');
+            }
+            const data = await registrarUsuario(nombre, correo, contrasena, rol);
+            window.location.href = '/inicioSesion';
+        } catch (error) {
+            setMensajeError(error.error || 'Error al registrar usuario');
+        } finally {
+            setCargando(false);
+        }
+    };
+
+
+    return (
+        <div className="contenedor-registro">
+            <form onSubmit={manejarEnvio} className="formulario">
+                <h1>Registrarse</h1>
+                <div className="contenido">
+                    <label>Nombre:</label>
+                    <input
+                        type="text"
+                        value={nombre}
+                        onChange={(e) => setNombre(e.target.value)}
+                    />
+                </div>
+                <div className="contenido">
+                    <label>Correo:</label>
+                    <input
+                        type="email"
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
+                    />
+                </div>
+                <div className="contenido">
+                    <label>Contraseña:</label>
+                    <input
+                        type="password"
+                        value={contrasena}
+                        onChange={(e) => setContrasena(e.target.value)}
+                    />
+                </div>
+                <div className="contenido">
+                    <label>Confirmar Contraseña:</label>
+                    <input
+                        type="password"
+                        value={constrasena2}
+                        onChange={(e) => setContrasena2(e.target.value)}
+                    />
+                </div>
+                <div className="contenido">
+                    <label>Rol:</label>
+                    <select value={rol} onChange={(e) => setRol(e.target.value)}>
+                        <option value="cliente">cliente</option>
+                        <option value="vendedor">vendedor</option>
+                    </select>
+                </div>
+                {mensajeError && alert(mensajeError)}
+                <button type="submit">
+                {cargando &&"Cargando..."|| "Registrar"} 
+                </button>
+               
+            </form>
+        </div>
+    )
+}
+
+
+export default Registro
