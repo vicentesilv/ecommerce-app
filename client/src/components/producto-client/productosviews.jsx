@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api/axios';
+import axios from 'axios';
+
+import './productos-views.css';
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
@@ -8,7 +10,23 @@ const Productos = () => {
         // Obtener productos del backend
         const fetchProductos = async () => {
             try {
-                const response = await api.get('/productos/mostrarProductos');
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    document.write('no ha iniciado sesion');
+                    setTimeout(() => {
+                        window.location.href = '/inicioSesion';
+                    }, 2000);
+
+                }
+                const response = await axios.get('http://localhost:3000/api/productos/mostrarProductos',
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                    }
+                );
+                console.log(response.data);
+                
                 setProductos(response.data);
             } catch (error) {
                 console.error('Error al obtener los productos:', error);
@@ -19,9 +37,9 @@ const Productos = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Lista de Productos</h1>
-            <ul>
+        <div className='contenedor-productos'>
+            {/* <h1>Lista de Productos</h1> */}
+            <ul className='lista-productos'>
                 {productos.map((producto) => (
                     <li key={producto.id}>
                         <h2>{producto.nombre}</h2>

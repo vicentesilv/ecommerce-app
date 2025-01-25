@@ -71,6 +71,10 @@ body{
         width: 50%;
         transition: 3s;
     }
+    .formulario .botonsesion{
+        margin: 45% auto 0;
+
+    }
 }
 @media screen and (max-width: 810px) {
     .contenedor-inicio-sesion{
@@ -89,5 +93,10 @@ body{
         width: 100%;
         transition: 3s;
     }
+    .formulario .botonsesion{
+        margin: 55% auto 0;
+        transition: 3s;
+    }
+
 }
 

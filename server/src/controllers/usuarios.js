@@ -40,6 +40,14 @@ const iniciarSesion = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+const mostrarUsuarios = async (req, res) => {
+    try {
+        const [usuarios] = await db.query('SELECT * FROM usuarios');
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({ error: error.message})        
+    }
+};
 
 
-module.exports = { registrarUsuario, iniciarSesion };
+module.exports = { registrarUsuario, iniciarSesion, mostrarUsuarios };

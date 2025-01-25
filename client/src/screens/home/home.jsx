@@ -7,9 +7,9 @@ import assets from "../../assets/imagenes";
 function Home() {
   return (
     <div className="contenedor">
-      <div class="slider-container">
-        <div class="slider-viewport">
-          <div class="slide" id="slide1">
+      <div className="slider-container">
+        <div className="slider-viewport">
+          <div className="slide" id="slide1">
             <span>.</span>
             <span>.</span>
             <span>.</span>
@@ -40,7 +40,7 @@ function Home() {
               <img src={assets["arrow-right"]} className="siguiente" alt="" />
             </a>
           </div>
-          <div class="slide" id="slide2">
+          <div className="slide" id="slide2">
             <div className="contenido">
               <span>.</span>
               <span>.</span>

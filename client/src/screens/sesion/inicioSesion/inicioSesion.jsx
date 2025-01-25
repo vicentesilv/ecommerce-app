@@ -2,7 +2,7 @@
 // import React, { useState } from 'react';
 
 import React, { useState } from "react";
-import api from "../../../api/axios";
+import  { iniciarSesion } from "../../../api/axios";
 import "./inicioSesion.css"
 
 function InicioSesion() {
@@ -20,9 +20,9 @@ function InicioSesion() {
             if (!correo || !contrasena) {
                 throw new Error('Por favor, complete todos los campos');
             }
-            const data = await api.post('/usuarios/login', { correo, contrasena });
+            const data = await iniciarSesion(correo, contrasena);
             localStorage.setItem('token', data.token);
-            window.location.href = '/'; // Redirigir a la pantalla principal
+            window.location.href = '/productos'; // Redirigir a la pantalla principal
         } catch (error) {
             setMensajeError(error.error || 'Error al iniciar sesión');
         } finally {
