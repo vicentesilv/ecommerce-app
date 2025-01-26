@@ -12,11 +12,10 @@ const Productos = () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    document.write('no ha iniciado sesion');
+                    document.write('no ha iniciado sesión');
                     setTimeout(() => {
                         window.location.href = '/inicioSesion';
                     }, 2000);
-
                 }
                 const response = await axios.get('http://localhost:3000/api/productos/mostrarProductos',
                     {
@@ -26,7 +25,7 @@ const Productos = () => {
                     }
                 );
                 console.log(response.data);
-                
+
                 setProductos(response.data);
             } catch (error) {
                 console.error('Error al obtener los productos:', error);
@@ -36,12 +35,46 @@ const Productos = () => {
         fetchProductos();
     }, []);
 
+    const agregarAlCarrito = async (idProducto) => {
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Debe iniciar sesión para agregar productos al carrito');
+                return;
+            }
+
+            const response = await axios.post('http://localhost:3000/api/carrito/agregarCarrito',
+                { idUsuario:1,idProducto, cantidad: 1 },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                }
+            );
+            alert(response.data.mensaje || 'Producto agregado al carrito');
+        } catch (error) {
+            console.error('Error al agregar el producto al carrito:', error);
+            alert('No se pudo agregar el producto al carrito');
+        }
+    };
+    
+
     return (
         <div className='contenedor-productos'>
-            {/* <h1>Lista de Productos</h1> */}
+            <div className='filtrado-productos'>
+                <select name="categoria" id="categoria">
+                    <option>seleccionar categoria</option>
+                    <option value="categoria1">ropa</option>
+                    <option value="categoria2">Categoria 2</option>
+                    <option value="categoria3">Categoria 3</option>
+                </select>
+                <input type="text" name="" id="" placeholder='buscar producto'/>
+                <button>Buscar</button>
+            </div>
+
             <ul className='lista-productos'>
                 {productos.map((producto) => (
-                    <li key={producto.id}>
+                    <li key={producto.id} className='tarjeta-producto'>
                         <h2>{producto.nombre}</h2>
                         <p>{producto.descripcion}</p>
                         <p>Precio: ${producto.precio}</p>
@@ -52,6 +85,12 @@ const Productos = () => {
                                 style={{ width: '200px', height: '200px' }}
                             />
                         )}
+                        <button
+                            className='boton-agregar-carrito'
+                            onClick={() => agregarAlCarrito(producto.id)}
+                        >
+                            Agregar al Carrito
+                        </button>
                     </li>
                 ))}
             </ul>

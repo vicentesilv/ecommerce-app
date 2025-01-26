@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-
-import { registrarUsuario } from "../../../api/axios";
+import axios from "axios";
+// import { registrarUsuario } from "../../../api/axios";
 import "./registro.css"
+// import  sesion  from "../../../api/api.service";
 
 function Registro() {
     const [nombre, setNombre] = useState('');
@@ -17,13 +18,17 @@ function Registro() {
         setMensajeError('');
         setCargando(true);
 
+
         try {
             if (contrasena !== constrasena2) {
                 throw new Error('Las contrasenas no coinciden');
             }
-            const data = await registrarUsuario(nombre, correo, contrasena, rol);
+            const response = await axios.post(`http://localhost:3000/api/usuarios/registro`, { nombre, correo, contrasena, rol });
+            // return response.data;
+            
             window.location.href = '/inicioSesion';
         } catch (error) {
+            // throw error.response ? error.response.data : new Error('Error desconocido');
             setMensajeError(error.error || 'Error al registrar usuario');
         } finally {
             setCargando(false);

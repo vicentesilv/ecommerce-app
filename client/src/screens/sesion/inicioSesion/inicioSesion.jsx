@@ -1,8 +1,6 @@
-// import api from "../../../api/axios";
-// import React, { useState } from 'react';
-
 import React, { useState } from "react";
-import  { iniciarSesion } from "../../../api/axios";
+import axios from "axios";
+
 import "./inicioSesion.css"
 
 function InicioSesion() {
@@ -20,7 +18,10 @@ function InicioSesion() {
             if (!correo || !contrasena) {
                 throw new Error('Por favor, complete todos los campos');
             }
-            const data = await iniciarSesion(correo, contrasena);
+            const response = await axios.post(`http://localhost:3000/api/usuarios/login`, { correo, contrasena });
+            const data = response.data;
+            console.log(data.token);
+            
             localStorage.setItem('token', data.token);
             window.location.href = '/productos'; // Redirigir a la pantalla principal
         } catch (error) {

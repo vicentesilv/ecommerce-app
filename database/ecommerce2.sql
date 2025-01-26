@@ -7,19 +7,22 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) UNIQUE NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
-    rol ENUM('admin', 'cliente') DEFAULT 'cliente',
-    estatus ENUM('activo', 'inactivo') DEFAULT 'activo',
+    rol ENUM('admin', 'cliente', 'vendedor') DEFAULT 'cliente',
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE productos (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    idVendedor INT NOT NULL,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
     precio DECIMAL(10, 2) NOT NULL,
     stock INT DEFAULT 0,
     imagen VARCHAR(255) DEFAULT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (idVendedor) REFERENCES usuarios(id) ON DELETE CASCADE,
+
+    
 );
 
 CREATE TABLE metodos_pago (

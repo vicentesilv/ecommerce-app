@@ -11,8 +11,30 @@ const obtenerProductos = async (req, res) => {
     }
 };
 
+const mostrarImagen = (req, res) => {
+    const { nombreImagen } = req.params;
+    const ruta = path.join(__dirname, '../imagenes', nombreImagen);
+
+    fs.access(ruta, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).json({ error: 'Imagen no encontrada' });
+        }
+        res.sendFile(ruta);
+    });
+};
+
+const obtenerProducto = async(req,res) =>{
+    const {nombre} = req.params;
+    try {
+        const [producto] = await db.query('SELECT * FROM productos WHERE nombre LIKE ?', [`%${nombre}%`]);
+        res.json(producto);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 const crearProducto = async (req, res) => {
-    const { nombre, descripcion, precio, stock } = req.body;
+    const { idVendedor, nombre, descripcion, precio, stock } = req.body;
 
     // Verificar si se subió un archivo
     if (!req.files || !req.files.imagen) {
@@ -29,8 +51,8 @@ const crearProducto = async (req, res) => {
 
         // Insertar el producto en la base de datos
         const [resultado] = await db.query(
-            'INSERT INTO productos (nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?)',
-            [nombre, descripcion, precio, stock, nombreArchivo]
+            'INSERT INTO productos (idVendedor, nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?, ?)',
+            [idVendedor, nombre, descripcion, precio, stock, nombreArchivo]
         );
 
         res.status(201).json({ mensaje: 'Producto creado con éxito', id: resultado.insertId });
@@ -39,16 +61,18 @@ const crearProducto = async (req, res) => {
     }
 };
 
-const mostrarImagen = (req, res) => {
-    const { nombreImagen } = req.params;
-    const ruta = path.join(__dirname, '../imagenes', nombreImagen);
+const mostrarProductosVendedor = async (req, res) => {
+    const { idVendedor } = req.params;
 
-    fs.access(ruta, fs.constants.F_OK, (err) => {
-        if (err) {
-            return res.status(404).json({ error: 'Imagen no encontrada' });
-        }
-        res.sendFile(ruta);
-    });
+    try {
+        const [productos] = await db.query(
+            'SELECT * FROM productos WHERE idVendedor = ?',
+            [idVendedor]
+        );
+        res.json(productos);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
 
 const editarProducto = async (req, res) => {
@@ -64,5 +88,16 @@ const editarProducto = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
-module.exports = { obtenerProductos, crearProducto, mostrarImagen,editarProducto };
+};
+const eliminarProducto = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await db.query('DELETE FROM productos WHERE id = ?', [id]);
+        res.json({ mensaje: 'Producto eliminado con éxito' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = { obtenerProductos,obtenerProducto, crearProducto, mostrarImagen,editarProducto,mostrarProductosVendedor,eliminarProducto };
