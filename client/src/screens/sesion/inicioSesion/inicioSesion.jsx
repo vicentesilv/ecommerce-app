@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 import "./inicioSesion.css"
+import { iniciarSesion } from "../../../services/sesion.service";
 
 function InicioSesion() {
     const [correo, setCorreo] = useState('');
@@ -18,11 +19,12 @@ function InicioSesion() {
             if (!correo || !contrasena) {
                 throw new Error('Por favor, complete todos los campos');
             }
-            const response = await axios.post(`http://localhost:3000/api/usuarios/login`, { correo, contrasena });
-            const data = response.data;
-            console.log(data.token);
+            // const response = await axios.post(`http://localhost:3000/api/usuarios/login`, { correo, contrasena });
+            const response = await iniciarSesion(correo, contrasena);
+            // const data = response.data;
+            // console.log(data.token);
             
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', response.token);
             window.location.href = '/productos'; // Redirigir a la pantalla principal
         } catch (error) {
             setMensajeError(error.error || 'Error al iniciar sesión');

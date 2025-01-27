@@ -1,80 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
+import { obtenerProductos, agregarProductoAlCarrito } from '../../services/productos.service'
 import './productos-views.css';
+import tokenAuth from '../../auth/token.auth';
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Obtener productos del backend
         const fetchProductos = async () => {
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    document.write('no ha iniciado sesión');
-                    setTimeout(() => {
-                        window.location.href = '/inicioSesion';
-                    }, 2000);
-                }
-                const response = await axios.get('http://localhost:3000/api/productos/mostrarProductos',
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                    }
-                );
-                console.log(response.data);
+                const token = tokenAuth();
 
-                setProductos(response.data);
-            } catch (error) {
-                console.error('Error al obtener los productos:', error);
+                const productosData = await obtenerProductos(token);
+                setProductos(productosData);
+            } catch (err) {
+                setError('Error al cargar los productos.');
+                console.error(err);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchProductos();
     }, []);
 
-    const agregarAlCarrito = async (idProducto) => {
+    const handleAgregarAlCarrito = async (idProducto) => {
         try {
             const token = localStorage.getItem('token');
             if (!token) {
-                alert('Debe iniciar sesión para agregar productos al carrito');
+                alert('Debe iniciar sesión para agregar productos al carrito.');
                 return;
             }
 
-            const response = await axios.post('http://localhost:3000/api/carrito/agregarCarrito',
-                { idUsuario:1,idProducto, cantidad: 1 },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                }
-            );
-            alert(response.data.mensaje || 'Producto agregado al carrito');
-        } catch (error) {
-            console.error('Error al agregar el producto al carrito:', error);
-            alert('No se pudo agregar el producto al carrito');
+            const response = await agregarProductoAlCarrito(1, idProducto, 1, token); // Suponiendo idUsuario = 1
+            alert(response.mensaje || 'Producto agregado al carrito.');
+        } catch (err) {
+            console.error('Error al agregar el producto al carrito:', err);
+            alert('No se pudo agregar el producto al carrito.');
         }
     };
-    
+
+    if (loading) return <p>Cargando productos...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
-        <div className='contenedor-productos'>
-            <div className='filtrado-productos'>
+        <div className="contenedor-productos">
+            {/* Filtros de búsqueda */}
+            <div className="filtrado-productos">
                 <select name="categoria" id="categoria">
-                    <option>seleccionar categoria</option>
-                    <option value="categoria1">ropa</option>
-                    <option value="categoria2">Categoria 2</option>
-                    <option value="categoria3">Categoria 3</option>
+                    <option>Seleccionar categoría</option>
+                    <option value="ropa">Ropa</option>
+                    <option value="categoria2">Categoría 2</option>
+                    <option value="categoria3">Categoría 3</option>
                 </select>
-                <input type="text" name="" id="" placeholder='buscar producto'/>
+                <input type="text" placeholder="Buscar producto" />
                 <button>Buscar</button>
             </div>
 
-            <ul className='lista-productos'>
+            {/* Lista de productos */}
+            <ul className="lista-productos">
                 {productos.map((producto) => (
-                    <li key={producto.id} className='tarjeta-producto'>
+                    <li key={producto.id} className="tarjeta-producto">
                         <h2>{producto.nombre}</h2>
                         <p>{producto.descripcion}</p>
                         <p>Precio: ${producto.precio}</p>
@@ -86,8 +74,8 @@ const Productos = () => {
                             />
                         )}
                         <button
-                            className='boton-agregar-carrito'
-                            onClick={() => agregarAlCarrito(producto.id)}
+                            className="boton-agregar-carrito"
+                            onClick={() => handleAgregarAlCarrito(producto.id)}
                         >
                             Agregar al Carrito
                         </button>

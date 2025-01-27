@@ -10,6 +10,7 @@ import Registro from './screens/sesion/registro/registro';
 import InicioSesion from './screens/sesion/inicioSesion/inicioSesion';
 import Productos from './components/producto-client/productosviews';
 import Page404 from './screens/page404/page404';
+import AdminUsuarios from './screens/adminUsuarios/adminUsuarios';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/registro" element={<Registro />} />
                 <Route path="/inicioSesion" element={<InicioSesion />} />
                 <Route path="/productos" element={<Productos />} />
+                <Route path="/adminUsuarios" element={<AdminUsuarios />} />
                 <Route path="*" element={<Page404 />} />
             </Routes>
         </BrowserRouter>

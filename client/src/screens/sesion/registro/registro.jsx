@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-// import { registrarUsuario } from "../../../api/axios";
+import { registrarUsuario } from "../../../services/sesion.service";
 import "./registro.css"
-// import  sesion  from "../../../api/api.service";
 
 function Registro() {
     const [nombre, setNombre] = useState('');
@@ -23,7 +21,7 @@ function Registro() {
             if (contrasena !== constrasena2) {
                 throw new Error('Las contrasenas no coinciden');
             }
-            const response = await axios.post(`http://localhost:3000/api/usuarios/registro`, { nombre, correo, contrasena, rol });
+            const response =  registrarUsuario(nombre, correo, contrasena, rol);
             // return response.data;
             
             window.location.href = '/inicioSesion';
