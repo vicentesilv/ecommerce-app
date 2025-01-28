@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 import "./inicioSesion.css"
 import { iniciarSesion } from "../../../services/sesion.service";
@@ -23,7 +22,8 @@ function InicioSesion() {
 
             
             localStorage.setItem('token', response.token);
-            window.location.href = '/productos'; 
+            window.location.href = '/rol';
+            rutaRol(); 
         } catch (error) {
             setMensajeError(error.error || 'Error al iniciar sesión');
         } finally {

@@ -46,6 +46,8 @@ const verificarRolRuta = (req, res) => {
                 return res.json({ ruta: '/adminUsuarios' });
             case 'vendedor':
                 return res.json({ ruta: '/vendedor' });
+            case 'cliente':
+                return res.json({ ruta: '/cliente' });
             default:
                 return res.status(403).json({ error: 'Rol no autorizado' });
         }

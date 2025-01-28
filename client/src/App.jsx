@@ -11,6 +11,7 @@ import InicioSesion from './screens/sesion/inicioSesion/inicioSesion';
 import Productos from './components/producto-client/productosviews';
 import Page404 from './screens/page404/page404';
 import AdminUsuarios from './screens/adminUsuarios/adminUsuarios';
+import VerificarRol from './auth/verificarRol';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/inicioSesion" element={<InicioSesion />} />
                 <Route path="/productos" element={<Productos />} />
                 <Route path="/adminUsuarios" element={<AdminUsuarios />} />
+                <Route path="/rol" element={<VerificarRol />} />
                 <Route path="*" element={<Page404 />} />
             </Routes>
         </BrowserRouter>
