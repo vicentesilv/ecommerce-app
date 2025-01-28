@@ -27,4 +27,32 @@ function verificarRol(role) {
     };
 }
 
-module.exports = { verificarToken, verificarRol };
+
+const verificarRolRuta = (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1]; // El JWT se espera en el header "Authorization: Bearer <token>"
+    
+    if (!token) {
+        return res.status(401).json({ error: 'Token no proporcionado' });
+    }
+
+    try {
+        // Decodificar el JWT
+        const decoded = jwt.verify(token, "clave_secreta");
+        const { rol } = decoded;
+
+        // Validar el rol y devolver la ruta correspondiente
+        switch (rol) {
+            case 'admin':
+                return res.json({ ruta: '/adminUsuarios' });
+            case 'vendedor':
+                return res.json({ ruta: '/vendedor' });
+            default:
+                return res.status(403).json({ error: 'Rol no autorizado' });
+        }
+    } catch (error) {
+        return res.status(401).json({ error: 'Token inválido o expirado' });
+    }
+};
+    
+
+module.exports = { verificarToken, verificarRol, verificarRolRuta };

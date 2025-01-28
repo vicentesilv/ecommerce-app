@@ -14,7 +14,7 @@ export const registrarUsuario = async (nombre,correo,contrasena,rol) => {
 
 export const iniciarSesion = async (correo, contrasena) => {
     try{
-        const response = await axios.post(`${API_URL}/usuarios/login`,{correo, contrasena});
+        const response = await axios.post(`${API_URL}/usuarios/login`,{correo, contrasena});        
         return response.data;
     }catch(error){
         throw error.response ? error.response.data : new Error('Error al iniciar sesion');

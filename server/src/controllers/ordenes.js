@@ -26,7 +26,7 @@ const crearOrden = async (req, res) => {
                 'INSERT INTO detalles_orden (id_orden, id_producto, cantidad, precio) VALUES (?, ?, ?, ?)',
                 [idOrden, item.id_producto, item.cantidad, item.precio]
             );
-            await db.query('UPDATE productos SET stock = stock - ? WHERE id = ?', [item.cantidad, item.id_producto]);
+            await db.query('UPDATE productos SET stock = stock - ?, cantidadVendida = cantidadVendida + ? WHERE id = ?', [item.cantidad, item.cantidad, item.id_producto]);
         }
 
         await db.query('DELETE FROM carrito WHERE id_usuario = ?', [idUsuario]);

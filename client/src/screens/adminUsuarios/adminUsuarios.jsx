@@ -1,107 +1,107 @@
-import "./adminUsuarios.css";
 import React, { useEffect, useState } from 'react';
-import axios from "axios";
+// import {
+//     obtenerUsuarios,
+//     eliminarUsuario,
+//     editarUsuario,
+// } from '../adminUsuarios/admin.service';
 
-function AdminUsuarios() {
+import { obtenerUsuarios, eliminarUsuario, editarUsuario } from '../../services/admin.service';
 
+const AdminUsuarios = () => {
     const [usuarios, setUsuarios] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Obtener productos del backend
-        const mostrarUsuarios = async () => {
+        const fetchUsuarios = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    document.write('no ha iniciado sesión');
-                    setTimeout(() => {
-                        window.location.href = '/inicioSesion';
-                    }, 2000);
+                    alert('Debe iniciar sesión.');
+                    window.location.href = '/inicioSesion';
+                    return;
                 }
-                // const response = await axios.get('http://localhost:3000/api/productos/mostrarProductos',
-                //     {
-                //         headers: {
-                //             'Authorization': `Bearer ${token}`
-                //         },
-                //     }
-                // );
-                const response = await axios.get('http://localhost:3000/api/usuarios/mostrarUsuarios',
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        },
-                });
-                console.log(response.data);
 
-                setUsuarios(response.data);
-            } catch (error) {
-                console.error('Error al obtener los productos:', error);
-                alert('Error al obtener los productos');
-                
+                const data = await obtenerUsuarios(token);
+        
+                setUsuarios(data);
+            } catch (err) {
+                setError('Error al cargar los usuarios.');
+                console.error(err);
+            } finally {
+                setLoading(false);
             }
         };
 
-        mostrarUsuarios();
+        fetchUsuarios();
     }, []);
 
-    const agregarAlCarrito = async (idProducto) => {
+    const handleEliminarUsuario = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            if (!token) {
-                alert('Debe iniciar sesión para agregar productos al carrito');
-                return;
-            }
-
-            const response = await axios.post('http://localhost:3000/api/carrito/agregarCarrito',
-                { idUsuario:1,idProducto, cantidad: 1 },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                }
-            );
-            alert(response.data.mensaje || 'Producto agregado al carrito');
-        } catch (error) {
-            console.error('Error al agregar el producto al carrito:', error);
-            alert('No se pudo agregar el producto al carrito');
+            const response = await eliminarUsuario(id, token);
+            alert(response.mensaje || 'Usuario eliminado con éxito.');
+            setUsuarios(usuarios.filter((usuario) => usuario.id !== id));
+        } catch (err) {
+            console.error('Error al eliminar el usuario:', err);
+            alert('No se pudo eliminar el usuario.');
         }
     };
-    
+
+    const handleEditarUsuario = async (id) => {
+        const nuevoRol = prompt('Ingrese el nuevo rol (admin/usuario):');
+        if (!nuevoRol) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await editarUsuario(id, nuevoRol, token);
+            alert(response.mensaje || 'Usuario actualizado con éxito.');
+            setUsuarios(
+                usuarios.map((usuario) =>
+                    usuario.id === id ? { ...usuario, rol: nuevoRol } : usuario
+                )
+            );
+        } catch (err) {
+            console.error('Error al editar el usuario:', err);
+            alert('No se pudo actualizar el usuario.');
+        }
+    };
+
+    if (loading) return <p>Cargando usuarios...</p>;
+    if (error) return <p>{error}</p>;
 
     return (
-        <div className='contenedor-productos'>
-            <div className='filtrado-productos'>
-                <select name="categoria" id="categoria">
-                    <option>seleccionar categoria</option>
-                    <option value="categoria1">ropa</option>
-                    <option value="categoria2">Categoria 2</option>
-                    <option value="categoria3">Categoria 3</option>
-                </select>
-                <input type="text" name="" id="" placeholder='buscar producto'/>
-                <button>Buscar</button>
-            </div>
-
-            <ul className='lista-productos'>
-                {usuarios.map((producto) => (
-                    <li key={producto.id} className='tarjeta-producto'>
-                        <h2>{producto.nombre}</h2>
-                        <p>{producto.descripcion}</p>
-                        <p>Precio: ${producto.precio}</p>
-                        {producto.imagen && (
-                            <img
-                                src={`${import.meta.env.VITE_API_URL}/productos/imagen/${producto.imagen}`}
-                                alt={producto.nombre}
-                                style={{ width: '200px', height: '200px' }}
-                            />
-                        )}
-                        <button
-                            className='boton-agregar-carrito'
-                            onClick={() => agregarAlCarrito(producto.id)}
-                        >
-                            Agregar al Carrito
-                        </button>
-                    </li>
-                ))}
-            </ul>
+        <div>
+            <h2>Gestión de Usuarios</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {usuarios.map((usuario) => (
+                        <tr key={usuario.id}>
+                            <td>{usuario.id}</td>
+                            <td>{usuario.nombre}</td>
+                            <td>{usuario.email}</td>
+                            <td>{usuario.rol}</td>
+                            <td>
+                                <button onClick={() => handleEditarUsuario(usuario.id)}>
+                                    Editar Rol
+                                </button>
+                                <button onClick={() => handleEliminarUsuario(usuario.id)}>
+                                    Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

@@ -3,12 +3,13 @@ const router = express.Router();
 
 const { registrarUsuario, iniciarSesion,mostrarUsuarios,eliminarUsuario,editarUsuario } = require('../controllers/usuarios');
 
-const { verificarRol, verificarToken } = require('../middleware/middleware.verify');
+const { verificarRol, verificarToken, verificarRolRuta,  } = require('../middleware/middleware.verify');
 
 //cualquier usuario puede registrarse
 router.post('/registro',registrarUsuario);
 router.post('/login', iniciarSesion);
 
+router.get('/rolRutas', verificarRolRuta);
 //solo el admin 
 router.get("/mostrarUsuarios", verificarToken, verificarRol("admin"), mostrarUsuarios);
 router.delete("/eliminarUsuario/:id", verificarToken, verificarRol("admin"), eliminarUsuario);
