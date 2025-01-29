@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
 import "./inicioSesion.css"
-import { iniciarSesion } from "../../../services/sesion.service";
+import { iniciarSesion } from "../../services/sesion.service";
 
 function InicioSesion() {
     const [correo, setCorreo] = useState('');
     const [contrasena, setContrasena] = useState('');
     const [mensajeError, setMensajeError] = useState('');
     const [cargando, setCargando] = useState(false);
-
+  
     const manejarEnvio = async (e) => {
         e.preventDefault();
         setMensajeError('');
@@ -20,7 +20,6 @@ function InicioSesion() {
             }
             const response = await iniciarSesion(correo, contrasena);
 
-            
             localStorage.setItem('token', response.token);
             window.location.href = '/rol';
             rutaRol(); 

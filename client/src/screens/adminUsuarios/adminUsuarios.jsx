@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-// import {
-//     obtenerUsuarios,
-//     eliminarUsuario,
-//     editarUsuario,
-// } from '../adminUsuarios/admin.service';
+
+import './adminUsuarios.css';
 
 import { obtenerUsuarios, eliminarUsuario, editarUsuario } from '../../services/admin.service';
+
+import Navbar from '../../components/navbar/navbar';
 
 const AdminUsuarios = () => {
     const [usuarios, setUsuarios] = useState([]);
@@ -14,12 +13,12 @@ const AdminUsuarios = () => {
 
     useEffect(() => {
         const fetchUsuarios = async () => {
+
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
                     alert('Debe iniciar sesión.');
                     window.location.href = '/inicioSesion';
-                    return;
                 }
 
                 const data = await obtenerUsuarios(token);
@@ -71,14 +70,17 @@ const AdminUsuarios = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
-            <h2>Gestión de Usuarios</h2>
+        <div className='adminUsuarios'>
+            <Navbar />
+          <div className="adminUsuarios-contenedor">
+              <h2>Gestión de Usuarios</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Identificador</th>
                         <th>Nombre</th>
                         <th>Email</th>
+                        <th>fecha</th>
                         <th>Rol</th>
                         <th>Acciones</th>
                     </tr>
@@ -88,13 +90,15 @@ const AdminUsuarios = () => {
                         <tr key={usuario.id}>
                             <td>{usuario.id}</td>
                             <td>{usuario.nombre}</td>
-                            <td>{usuario.email}</td>
+                            <td>{usuario.correo}</td>
+                            <td>{ new Date(usuario.creado_en).toDateString()}</td>
                             <td>{usuario.rol}</td>
+
                             <td>
-                                <button onClick={() => handleEditarUsuario(usuario.id)}>
+                                <button className='botonEditar' onClick={() => handleEditarUsuario(usuario.id)}>
                                     Editar Rol
                                 </button>
-                                <button onClick={() => handleEliminarUsuario(usuario.id)}>
+                                <button className='botonEliminar' onClick={() => handleEliminarUsuario(usuario.id)}>
                                     Eliminar
                                 </button>
                             </td>
@@ -103,6 +107,7 @@ const AdminUsuarios = () => {
                 </tbody>
             </table>
         </div>
+          </div>
     );
 };
 

@@ -30,7 +30,7 @@ const iniciarSesion = async (req, res) => {
         const coincide = await bcrypt.compare(contrasena, usuario.contrasena);
         if (!coincide) return res.status(401).json({ error: 'Credenciales inválidas' });
 
-        const token = jwt.sign({ id: usuario.id, rol: usuario.rol }, 'clave_secreta', { expiresIn: '1h' });
+        const token = jwt.sign({ id: usuario.id, rol: usuario.rol,nombre: usuario.nombre,correo: usuario.correo,fecha: usuario.	creado_en }, 'clave_secreta', { expiresIn: '1h' });
         res.json({ token });
     } catch (error) {
         res.status(500).json({ error: error.message });

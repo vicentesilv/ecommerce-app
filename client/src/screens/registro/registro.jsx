@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { registrarUsuario } from "../../../services/sesion.service";
+import { registrarUsuario } from "../../services/sesion.service";
 import "./registro.css"
 
 function Registro() {
@@ -18,9 +18,8 @@ function Registro() {
 
 
         try {
-            if (contrasena !== constrasena2) {
-                throw new Error('Las contrasenas no coinciden');
-            }
+            if (contrasena !== constrasena2)  throw new Error('Las contrasenas no coinciden');
+            
             const response =  registrarUsuario(nombre, correo, contrasena, rol);
             // return response.data;
             

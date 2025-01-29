@@ -20,7 +20,14 @@ const VerificarRol = () => {
         });
 
         // Obtener la ruta devuelta en la respuesta
-        const { ruta } = response.data;
+        const { ruta,id,rol,nombre,correo,fecha  } = response.data;
+        localStorage.setItem('id', id);
+        localStorage.setItem('nombre', nombre);
+        localStorage.setItem('correo', correo);
+        localStorage.setItem('rol', rol);
+        localStorage.setItem('fecha', fecha);
+
+
 
         if (ruta) {
           // Redirigir a la ruta obtenida

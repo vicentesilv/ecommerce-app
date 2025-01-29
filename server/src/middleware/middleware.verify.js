@@ -38,16 +38,16 @@ const verificarRolRuta = (req, res) => {
     try {
         // Decodificar el JWT
         const decoded = jwt.verify(token, "clave_secreta");
-        const { rol } = decoded;
+        const { id, rol, nombre,correo,fecha } = decoded;
 
         // Validar el rol y devolver la ruta correspondiente
         switch (rol) {
             case 'admin':
-                return res.json({ ruta: '/adminUsuarios' });
+                return res.json({ ruta: '/adminUsuarios' , id,rol,nombre,correo,fecha});
             case 'vendedor':
-                return res.json({ ruta: '/vendedor' });
+                return res.json({ ruta: '/vendedor' ,id,rol,nombre,correo,fecha});
             case 'cliente':
-                return res.json({ ruta: '/cliente' });
+                return res.json({ ruta: '/cliente',id,rol,nombre,correo,fecha });
             default:
                 return res.status(403).json({ error: 'Rol no autorizado' });
         }

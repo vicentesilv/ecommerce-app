@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { obtenerProductos, agregarProductoAlCarrito } from '../../services/productos.service'
 import './productos-views.css';
 import tokenAuth from '../../auth/token.auth';
+import Navbar from '../navbar/navbar';
 
 const Productos = () => {
     const [productos, setProductos] = useState([]);
@@ -46,7 +47,9 @@ const Productos = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="contenedor-productos">
+        <div>
+            <Navbar />
+            <div className="contenedor-productos">
             {/* Filtros de búsqueda */}
             <div className="filtrado-productos">
                 <select name="categoria" id="categoria">
@@ -82,6 +85,7 @@ const Productos = () => {
                     </li>
                 ))}
             </ul>
+        </div>
         </div>
     );
 };
