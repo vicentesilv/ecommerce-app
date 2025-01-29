@@ -38,7 +38,7 @@
     background-color: #ff2c10;
     color: #ffffff;
     padding: 5px;
-    width: 35%;
+    width: 100px;
     height: 30px;
     margin-left: 10%;
     border-radius: 5px;
@@ -56,7 +56,7 @@
     background-color: #ffc710;
     color: #797979;
     padding: 5px;
-    width: 35%;
+    width: 100px;
     height: 30px;
     margin-left: 10%;
     border-radius: 5px;
@@ -69,3 +69,17 @@
     scale: 1.1;
     transition: 0.2s;
 }
+.adminUsuarios-contenedor .filtroRol{
+    margin-left: 70%;
+    width: 10%;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    padding: 0 0 0 10px;
+}
+.hscroll {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto; /* Horizontal */
+  }

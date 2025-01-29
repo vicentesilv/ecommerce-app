@@ -64,7 +64,7 @@ const editarUsuario = async (req, res) => {
     try {
         await db.query(
             'UPDATE usuarios SET rol = ?  WHERE id = ?',
-            [ rol ]
+            [ rol ,id]
         );
         res.json({ mensaje: 'Usuario actualizado con éxito' });
     } catch (error) {

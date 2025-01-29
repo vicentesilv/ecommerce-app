@@ -30,7 +30,7 @@ export const eliminarUsuario = async (id, token) => {
 export const editarUsuario = async (id, rol, token) => {
     const response = await axios.put(
         `${API_URL}/usuarios/editarUsuario/${id}`,
-        { rol },
+        {rol},
         {
             headers: {
                 Authorization: `Bearer ${token}`,
