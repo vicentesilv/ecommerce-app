@@ -19,8 +19,10 @@ CREATE TABLE productos (
     precio DECIMAL(10, 2) NOT NULL,
     stock INT DEFAULT 0,
     imagen VARCHAR(255) DEFAULT NULL,
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    FOREIGN KEY (idVendedor) REFERENCES usuarios(id) ON DELETE CASCADE,
+    categoria ENUM('ropa','calzado','electrodomesticos','tecnologia','gadgets','muebles','deportes','accesorios','juguetes','libros','musica','peliculas','videojuegos','alimentos','bebidas','hogar','jardin','mascotas','salud','belleza'),
+    cantidadVendida INT,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (idVendedor) REFERENCES usuarios(id) ON DELETE CASCADE
 
     
 );

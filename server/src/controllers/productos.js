@@ -34,7 +34,7 @@ const obtenerProducto = async(req,res) =>{
 };
 
 const crearProducto = async (req, res) => {
-    const { idVendedor, nombre, descripcion, precio, stock } = req.body;
+    const { idVendedor, nombre, descripcion, precio, stock, categoria } = req.body;
 
     // Verificar si se subió un archivo
     if (!req.files || !req.files.imagen) {
@@ -51,8 +51,8 @@ const crearProducto = async (req, res) => {
 
         // Insertar el producto en la base de datos
         const [resultado] = await db.query(
-            'INSERT INTO productos (idVendedor, nombre, descripcion, precio, stock, imagen) VALUES (?, ?, ?, ?, ?, ?)',
-            [idVendedor, nombre, descripcion, precio, stock, nombreArchivo]
+            'INSERT INTO productos (idVendedor, nombre, descripcion, precio, stock, imagen,categoria) VALUES (?, ?, ?, ?, ?, ?)',
+            [idVendedor, nombre, descripcion, precio, stock, nombreArchivo,categoria]
         );
 
         res.status(201).json({ mensaje: 'Producto creado con éxito', id: resultado.insertId });
@@ -81,8 +81,8 @@ const editarProducto = async (req, res) => {
 
     try {
         await db.query(
-            'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ? WHERE id = ?',
-            [nombre, descripcion, precio, stock, id]
+            'UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ?,categoria = ?  WHERE id = ?',
+            [nombre, descripcion, precio, stock, categoria,id]
         );
         res.json({ mensaje: 'Producto actualizado con éxito' });
     } catch (error) {

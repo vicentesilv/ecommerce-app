@@ -54,6 +54,7 @@ const Productos = () => {
             <div className="filtrado-productos">
                 <select name="categoria" id="categoria">
                     <option>Seleccionar categoría</option>
+                    'ropa','calzado','electrodomesticos','tecnologia','gagets','muebles','deportes','accesorios','juguetes','libros','musica','peliculas','videojuegos','alimentos','bebidas','hogar','jardin','mascotas','salud','belleza','ropa','calzado','accesorios','tecnologia','gadgets','deportes','juguetes','libros','musica','peliculas','videojuegos','alimentos','bebidas','hogar','jardin','mascotas','salud','belleza'
                     <option value="ropa">Ropa</option>
                     <option value="categoria2">Categoría 2</option>
                     <option value="categoria3">Categoría 3</option>
