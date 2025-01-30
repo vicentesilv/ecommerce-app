@@ -85,8 +85,8 @@ const AdminUsuarios = () => {
                     <option value="cliente">cliente</option>
                     <option value="vendedor">vendedor</option>
                 </select>
-                <div class="hscroll">
-                <table cellspacing="0" cellpadding="6">
+                <div className="hscroll">
+                <table >
                     <thead>
                         <tr>
                             <th>Identificador</th>

@@ -8,6 +8,7 @@ import Productos from './components/producto-client/productosviews';
 import Page404 from './screens/page404/page404';
 import AdminUsuarios from './screens/adminUsuarios/adminUsuarios';
 import VerificarRol from './auth/verificarRol';
+import CerrarSesion from './auth/cerrarSesion.auth';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/productos" element={<Productos />} />
                 <Route path="/adminUsuarios" element={<AdminUsuarios />} />
                 <Route path="/rol" element={<VerificarRol />} />
+                <Route path="/cerrarSesion" element={<CerrarSesion />} />
                 <Route path="*" element={<Page404 />} />
             </Routes>
         </BrowserRouter>
