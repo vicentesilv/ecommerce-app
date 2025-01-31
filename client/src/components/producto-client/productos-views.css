@@ -1,10 +1,15 @@
 .contenedor-productos{
-display: flex;
+
 
 }
 .lista-productos{
-    display: grid;
-    grid-template-columns: 50% 50%;
+    width: 100%;
+    height: 100%;
+    background-color: #e6e6e6;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
 }
 .lista-productos li{
     margin: 0 40px 40px 0;
