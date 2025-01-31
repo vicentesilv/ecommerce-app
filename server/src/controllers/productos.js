@@ -86,7 +86,7 @@ const editarProducto = async (req, res) => {
         );
         res.json({ mensaje: 'Producto actualizado con éxito' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message }); 
     }
 };
 const eliminarProducto = async (req, res) => {
