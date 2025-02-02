@@ -1,21 +1,146 @@
-.contenedor-productos{
-
+.productos{
+    width: 100%;
+    height: 100vh;
+    background-color: #f7eee9;
 
 }
 .lista-productos{
     width: 100%;
     height: 100%;
-    background-color: #e6e6e6;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-content: center;
+    justify-content: center;
 }
 .lista-productos li{
     margin: 0 40px 40px 0;
     border: 1px solid #000;
+    border-radius: 25px;
+    width: 310px;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
 }
+.filtrado-productos{
+    width: 600px;
+    margin-left: 70%;
+    padding: 20px;
+}
+.filtrado-productos select{
+    width: 202px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f7eee9;
+    border: 1px solid #000;
+    margin-left: 10px;
+}
+.filtrado-productos input{
+    width: 250px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f7eee9;
+    border: 1px solid #000;
+    margin-left: 10px;
+}
+.filtrado-productos button{
+    width: 70px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f7eee9;
+    border: 1px solid #000;
+    margin-left: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 2000px) {
+    .filtrado-productos{
+        margin-left: 69%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 1980px) {
+    .filtrado-productos{
+        margin-left: 65%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 1730px) {
+    .filtrado-productos{
+        margin-left: 60%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 1600px) {
+    .filtrado-productos{
+        margin-left: 55%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 1360px) {
+    .filtrado-productos{
+        margin-left: 45%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 1120px) {
+    .filtrado-productos{
+        margin-left: 35%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 950px) {
+    .filtrado-productos{
+        margin-left: 25%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 850px) {
+    .filtrado-productos{
+        margin-left: 20%;
+        padding: 20px;
+    }
+}
+@media screen and (max-width: 700px) {
+    .filtrado-productos{
+        padding: 20px;
+    }
+    .filtrado-productos select{
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+    }
+    .filtrado-productos input{
+        width: 150px;
+        font-size: 12px;
+        text-align: center;
+    }
+    .filtrado-productos button{
+        width: 50px;
+        font-size: 12px;
+        text-align: center;
+    }
+}
+@media screen and (max-width: 600px) {
+    .filtrado-productos{
+        margin-left: 15%;
+        padding: 20px;
+    }
+}
+/* @media screen and (max-width: 962) {
+    .filtrado-productos{
+        padding: 20px;
+        
+    }
+   
+} */

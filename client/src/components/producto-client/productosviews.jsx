@@ -16,6 +16,7 @@ const Productos = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filtros, setFiltros] = useState("");
+    const [busqueda, setBusqueda] = useState("");
     const [cantidad, setCantidad] = useState(1);
     const navigate = useNavigate();
 
@@ -34,7 +35,11 @@ const Productos = () => {
         cargarProductos();
     }, []);
 
-    const productosFiltrados = filtros ? productos.filter(({ categoria }) => categoria.toLowerCase() === filtros.toLowerCase()) : productos;
+    const productosFiltrados = productos.filter(producto => {
+        const coincideCategoria = filtros ? producto.categoria.toLowerCase() === filtros.toLowerCase() : true;
+        const coincideBusqueda = producto.nombre.toLowerCase().includes(busqueda.toLowerCase());
+        return coincideCategoria && coincideBusqueda;
+    });
 
     const agregarAlCarrito = async (idProducto) => {
         try {
@@ -55,7 +60,7 @@ const Productos = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div>
+        <div className='productos'>
             <Navbar />
             <div className="contenedor-productos">
                 <div className="filtrado-productos">
@@ -65,7 +70,12 @@ const Productos = () => {
                             <option key={categoria} value={categoria}>{categoria.charAt(0).toUpperCase() + categoria.slice(1)}</option>
                         ))}
                     </select>
-                    <input type="text" placeholder="Buscar producto" />
+                    <input 
+                        type="text" 
+                        placeholder="Buscar producto" 
+                        value={busqueda}
+                        onChange={(e) => setBusqueda(e.target.value)}
+                    />
                     <button>Buscar</button>
                 </div>
                 <ul className="lista-productos">

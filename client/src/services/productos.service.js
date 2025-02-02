@@ -25,3 +25,8 @@ export const agregarProductoAlCarrito = async (idUsuario, idProducto, cantidad, 
     );
     return response.data;
 };
+
+export const buscarProductos = async (busqueda) => {
+    const response = await axios.get(`${API_URL}/productos/obtnerProducto/${busqueda}`);
+    return response.data;
+};
