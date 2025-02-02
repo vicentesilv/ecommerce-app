@@ -3,12 +3,8 @@ import axios from 'axios';
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Obtener productos
-export const obtenerProductos = async (token) => {
-    const response = await axios.get(`${API_URL}/productos/mostrarProductos`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
+export const obtenerProductos = async () => {
+    const response = await axios.get(`${API_URL}/productos/mostrarProductos`);
     return response.data;
 };
 

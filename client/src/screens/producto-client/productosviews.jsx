@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { obtenerProductos, agregarProductoAlCarrito } from '../../services/productos.service';
 import './productos-views.css';
 import tokenAuth from '../../auth/token.auth';
-import Navbar from '../navbar/navbar';
+import Navbar from '../../components/navbar/navbar';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIAS = [
@@ -23,7 +23,7 @@ const Productos = () => {
     useEffect(() => {
         const cargarProductos = async () => {
             try {
-                const productosData = await obtenerProductos(tokenAuth());
+                const productosData = await obtenerProductos();
                 setProductos(productosData);
             } catch (err) {
                 setError('Error al cargar los productos.');
