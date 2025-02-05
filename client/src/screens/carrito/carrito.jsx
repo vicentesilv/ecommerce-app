@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import obtenerCarrito from '../../services/carrito.service';
+import {obtenerCarrito,  eliminarProducto } from '../../services/carrito.service';
 import { useParams } from 'react-router-dom';
 import Navbar from '../../components/navbar/navbar';
+import './carrito.css';
 
 const Carrito = () => {
     const [carrito, setCarrito] = useState([]);
@@ -31,17 +32,19 @@ const Carrito = () => {
         <div>
             <Navbar />
             <div className="carrito">
-                <h1>Carrito de Compras</h1>
-                <ul className="lista-carrito">
-                    {carrito.map(({ id, nombre, precio, cantidad }) => (
-                    <li key={id} className="item-carrito">
-                        <h2>{nombre}</h2>
-                        <p>Precio: ${precio}</p>
-                        <p>Cantidad: {cantidad}</p>
-                        <p>Total: ${(precio * cantidad).toFixed(2)}</p>
-                    </li>
-                    ))}
-            </ul>
+               <div className="carrito-container">
+                   <ul className="lista-carrito">
+                        {carrito.map(({ id, nombre, precio, cantidad }) => (
+                        <li key={id} className="item-carrito">
+                            <h1>{id}</h1>
+                            <h2>{nombre}</h2>
+                            <p>Precio: ${precio}</p>
+                            <p>Cantidad: {cantidad}</p>
+                            <p>Total: ${(precio * cantidad).toFixed(2)}</p>
+                            <button onClick={() => eliminarProducto(id) }>Eliminar producto</button>
+                        </li> ))}
+                    </ul>
+               </div>
         </div>
         </div>
     );
