@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {obtenerCarrito,  eliminarProducto } from '../../services/carrito.service';
+import {obtenerCarrito,  eliminarProducto, vaciarCarrito } from '../../services/carrito.service';
 import { useParams } from 'react-router-dom';
 import Navbar from '../../components/navbar/navbar';
 import './carrito.css';
@@ -44,7 +44,10 @@ const Carrito = () => {
                             <button onClick={() => eliminarProducto(id) }>Eliminar producto</button>
                         </li> ))}
                     </ul>
+                    <button>comprar</button>
+                    <button onClick={() => vaciarCarrito(localStorage.getItem('id'))}>vaciar carrito</button>
                </div>
+
         </div>
         </div>
     );
