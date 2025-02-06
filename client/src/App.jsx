@@ -10,6 +10,7 @@ import AdminUsuarios from './screens/adminUsuarios/adminUsuarios';
 import VerificarRol from './auth/verificarRol';
 import CerrarSesion from './auth/cerrarSesion.auth';
 import Carrito from './screens/carrito/carrito';
+import MiPerfil from './screens/miPerfil/miPerfil';
 
 function App() {
     return (
@@ -19,6 +20,7 @@ function App() {
                 {/* rutas de productos */}
                 <Route path="/" element={<Productos />} />
                 <Route path="/carrito/:idUsuario" element={<Carrito />} />
+                <Route path="/miPerfil" element={<MiPerfil />} />
                 {/* ordenes */}
                 
                 {/* rutas de admin */}
