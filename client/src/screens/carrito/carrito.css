@@ -1,12 +1,10 @@
 .carrito{
     width: 100%;
     height: 100vh;
-    background-color: #f7eee9;
 }
 .carrito-container{
     width: 100%;
     height: 70%;
-    background-color: #f7eee9;
     margin: 80px 0 0 0 ;
 }
 .lista-carrito{

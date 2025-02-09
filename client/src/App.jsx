@@ -11,6 +11,7 @@ import VerificarRol from './auth/verificarRol';
 import CerrarSesion from './auth/cerrarSesion.auth';
 import Carrito from './screens/carrito/carrito';
 import MiPerfil from './screens/miPerfil/miPerfil';
+import Pedidos from './screens/pedidos/pedidos';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 {/* rutas de productos */}
                 <Route path="/" element={<Productos />} />
                 <Route path="/carrito/:idUsuario" element={<Carrito />} />
+                <Route path="/pedidos" element={<Pedidos />} />
                 <Route path="/miPerfil" element={<MiPerfil />} />
                 {/* ordenes */}
                 

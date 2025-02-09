@@ -7,8 +7,24 @@ import './carrito.css';
 const Carrito = () => {
     const [carrito, setCarrito] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [metodoPago, setMetodoPago] = useState("");
+    // cosnt [metodoPago, setMetodoPago] = useState("");
     const [error, setError] = useState(null);
     const { idUsuario } = useParams();
+    const crearPedido = async (metodoPago) => {
+        try {
+            // console.log(idUsuario, metodoPago);
+            
+            const response = await axios.post(
+                `${apiUrl}/ordenes/crearOrden/${idUsuario}`,
+                { metodoPago }
+            );
+            window.location.reload();
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     useEffect(() => {
         const cargarCarrito = async () => {
@@ -44,7 +60,13 @@ const Carrito = () => {
                             <button onClick={() => eliminarProducto(id) }>Eliminar producto</button>
                         </li> ))}
                     </ul>
-                    <button>comprar</button>
+                    <select name="metodoPago" id="metodoPago" onChange={(e) => setMetodoPago(e.target.value)} value={metodoPago}>
+                        <option value="">Seleccione un metodo de pago"</option>
+                        <option value="1">tarjeta de credito</option>
+                        <option value="2">paypal</option>
+                        <option value="3">transferencia bancaria</option>
+                    </select>
+                    <button onClick={() => crearPedido(metodoPago)}>comprar</button>
                     <button onClick={() => vaciarCarrito(localStorage.getItem('id'))}>vaciar carrito</button>
                </div>
 
